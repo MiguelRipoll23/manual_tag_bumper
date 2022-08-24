@@ -12,7 +12,7 @@ deno install --unstable --allow-run --allow-read -n bump https://deno.land/x/man
 
 ## Demo
 
-[![asciicast](https://asciinema.org/a/5PFzcyGY5RXMXLj7yG3ogiwvn.svg)](https://asciinema.org/a/5PFzcyGY5RXMXLj7yG3ogiwvn)
+[![asciicast](https://asciinema.org/a/DfbNJ6C806Vo6VEo8ZJ8JJTZP.svg)](https://asciinema.org/a/DfbNJ6C806Vo6VEo8ZJ8JJTZP)
 
 ## Usage
 
