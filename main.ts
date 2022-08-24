@@ -53,10 +53,6 @@ async function main() {
     return;
   }
 
-  if (remote) {
-    await git.pushTag();
-  }
-
   console.info(constants.TEXT_EMPTY);
 }
 
@@ -233,10 +229,6 @@ async function updateVersionFilesIfExists(newTagName: string, remote: boolean) {
     console.info(constants.TEXT_EMPTY);
 
     await git.createBumpCommit(newTagName);
-
-    if (remote) {
-      await git.pushCommit();
-    }
 
     console.info(constants.TEXT_EMPTY);
   }
