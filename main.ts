@@ -10,13 +10,13 @@ import * as files from "./utils/files.ts";
 main();
 
 async function main() {
-  // Git status
-  const { staged, remote, updated } = await git.getStatus();
+  // Get status
+  const { staged, remote, updated } = await git.getStatus(true);
 
   exitIfChangesUnstaged(staged);
   exitIfBranchOutdated(updated);
 
-  // Tag & source
+  // Get tag
   const { tagName, remoteError } = await getLatestTagAndSource(remote);
   const currentVersionKind = version.getKind(tagName);
 
@@ -40,20 +40,11 @@ async function main() {
     return;
   }
 
-  // Version files
+  // Update version files
   await updateVersionFilesIfExists(newTagName, remote);
 
-  // Tag
-  const tagCreated = await git.createTag(newTagName);
-
-  if (tagCreated === false) {
-    console.info(constants.TEXT_EMPTY);
-    main();
-
-    return;
-  }
-
-  console.info(constants.TEXT_EMPTY);
+  // Create tag
+  await git.createTag(newTagName);
 }
 
 function exitIfChangesUnstaged(staged: boolean) {
@@ -116,8 +107,13 @@ function printTag(
     local = colors.bold.yellow(constants.TEXT_LOCAL);
   }
 
+  console.info(constants.TEXT_EMPTY);
+
   console.info(
-    colors.bold(constants.TEXT_LATEST_VERSION),
+    colors.bold(constants.TEXT_LATEST_TAG),
+  );
+
+  console.info(
     colors.bold.blue(version.formatWithEmoji(tagName, currentVersionKind)),
     local,
   );
@@ -218,18 +214,11 @@ async function updateVersionFilesIfExists(newTagName: string, remote: boolean) {
   exitIfChangesUnstaged(staged);
   exitIfBranchOutdated(updated);
 
-  console.info(constants.TEXT_SEARCHING_FOR_VERSION_FILES);
-  console.info(constants.TEXT_EMPTY);
-
   newTagName = newTagName.replace(/^v/, constants.TEXT_EMPTY);
 
   const filesChanged = await files.updateVersionFiles(newTagName);
 
   if (filesChanged > 0) {
-    console.info(constants.TEXT_EMPTY);
-
     await git.createBumpCommit(newTagName);
-
-    console.info(constants.TEXT_EMPTY);
   }
 }

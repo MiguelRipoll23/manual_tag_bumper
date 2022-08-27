@@ -2,13 +2,14 @@ import * as constants from "../constants.ts";
 import { colors } from "../deps.ts";
 import { runCommand } from "./shell.ts";
 
-async function getStatus() {
+async function getStatus(log = false) {
   const { code, output, errorOutput } = await runCommand(
     constants.GIT_COMMAND,
     [
       constants.GIT_COMMAND_ARGUMENT_STATUS,
       constants.GIT_COMMAND_ARGUMENT_UNO,
     ],
+    log,
   );
 
   if (code !== 0) {
@@ -52,6 +53,7 @@ async function getLatestTagFromRemote() {
       constants.GIT_COMMAND_ARGUMENT_SORT_DESC_V_REFNAME,
       constants.GIT_COMMAND_ARGUMENT_ORIGIN,
     ],
+    true,
   );
 
   if (code !== 0) {
@@ -91,6 +93,7 @@ async function getLatestTagFromLocal() {
       constants.GIT_COMMAND_ARGUMENT_TAGS,
       constants.GIT_COMMAND_ARGUMENT_ABBREV_0,
     ],
+    true,
   );
 
   if (code === 0) {
@@ -162,6 +165,8 @@ async function pushCommit() {
 }
 
 async function createTag(tagName: string) {
+  console.info(constants.TEXT_EMPTY);
+
   console.info(
     `${constants.TEXT_TAG} ${
       colors.bold.yellow(constants.TEXT_ACTION_CREATING)

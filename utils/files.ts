@@ -30,25 +30,11 @@ async function updatePackageJsonIfExists(newTagName: string) {
     return changed;
   }
 
-  console.info(
-    `${constants.FILE_TEXT} ${
-      colors.bold.blue("[" + constants.NPM_COMMAND + "]")
-    } ${colors.bold.yellow(constants.TEXT_ACTION_UPDATING)}`,
-  );
-
   changed = await updatePackageFile(newTagName);
 
   if (changed === 0) {
     // Windows
     changed = await updatePackageFile(newTagName, true);
-  }
-
-  if (changed) {
-    console.info(
-      `${constants.FILE_TEXT} ${
-        colors.bold.blue("[" + constants.NPM_COMMAND + "]")
-      } ${colors.bold.green(constants.TEXT_ACTION_UPDATED)}`,
-    );
   }
 
   return changed;
@@ -88,25 +74,11 @@ async function updatePomFileIfExists(newTagName: string) {
     return changed;
   }
 
-  console.info(
-    `${constants.FILE_TEXT} ${
-      colors.bold.blue("[" + constants.MVN_COMMAND + "]")
-    } ${colors.bold.yellow(constants.TEXT_ACTION_UPDATING)}`,
-  );
-
   changed = await updatePomFile(newTagName);
 
   if (changed === 0) {
     // Windows
     changed = await updatePomFile(newTagName, true);
-  }
-
-  if (changed) {
-    console.info(
-      `${constants.FILE_TEXT} ${
-        colors.bold.blue("[" + constants.MVN_COMMAND + "]")
-      } ${colors.bold.green(constants.TEXT_ACTION_UPDATED)}`,
-    );
   }
 
   return changed;
