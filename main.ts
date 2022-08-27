@@ -202,8 +202,6 @@ async function confirmTag(newTagName: string) {
     `${constants.TEXT_CONFIRM_VERSION} ${colors.yellow(newTagName)}`,
   );
 
-  console.info(constants.TEXT_EMPTY);
-
   return promptResponse;
 }
 
@@ -219,6 +217,7 @@ async function updateVersionFilesIfExists(newTagName: string, remote: boolean) {
   const filesChanged = await files.updateVersionFiles(newTagName);
 
   if (filesChanged > 0) {
+    console.info(constants.TEXT_EMPTY);
     await git.createBumpCommit(newTagName);
   }
 }
