@@ -1,3 +1,4 @@
+// Git
 export const GIT_INITIAL_TAG_NAME = "0.0.1-alpha.0";
 
 export const GIT_COMMAND = "git";
@@ -48,7 +49,8 @@ export const MVN_COMMAND_ARGUMENT_D_NEW_VERSION = "-DnewVersion=";
 export const WINDOWS_COMMAND_CMD_SUFFIX = ".cmd";
 export const WINDOWS_COMMAND_BAT_SUFFIX = ".bat";
 
-export const EMOJI_REMOTE = "📡";
+// Emoji
+export const EMOJI_SHELL = "🐚";
 export const EMOJI_UNKNOWN = "🔨";
 export const EMOJI_STABLE = "🚀";
 export const EMOJI_BETA = "🧪";
@@ -60,11 +62,12 @@ export const EMOJI_MAJOR = "💥";
 export const EMOJI_MINOR = "🎉";
 export const EMOJI_PATCH = "🐛";
 
+// Text
 export const TEXT_EMPTY = "";
 export const TEXT_WHITESPACE = " ";
 export const TEXT_UNKNOWN = "unknown";
 export const TEXT_LOCAL = "(local)";
-export const TEXT_LATEST_VERSION = "Latest version:";
+export const TEXT_LATEST_TAG = "Latest tag:";
 export const TEXT_PICK_VERSION_KIND = "Pick version kind";
 export const TEXT_STABLE = "stable";
 export const TEXT_BETA = "beta";
@@ -77,7 +80,6 @@ export const TEXT_MAJOR = "major";
 export const TEXT_MINOR = "minor";
 export const TEXT_PATCH = "patch";
 export const TEXT_CONFIRM_VERSION = "Confirm version";
-export const FILE_TEXT = "File";
 export const TEXT_COMMIT = "Commit";
 export const TEXT_TAG = "Tag";
 
@@ -98,6 +100,3 @@ export const TEXT_ERROR_CHANGES_UNSTAGED =
 
 export const TEXT_ERROR_BRANCH_OUTDATED =
   "Branch outdated, update your current branch";
-
-export const TEXT_SEARCHING_FOR_VERSION_FILES =
-  "Searching for version files...";
