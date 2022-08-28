@@ -1,4 +1,3 @@
-import { colors } from "../deps.ts";
 import { runCommand } from "./shell.ts";
 
 import * as constants from "../constants.ts";
