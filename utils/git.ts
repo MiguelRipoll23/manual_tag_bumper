@@ -112,6 +112,26 @@ async function getLatestTagFromLocal() {
   Deno.exit(1);
 }
 
+async function switchToNewBranch(tagName: string) {
+  console.info(
+    `${constants.TEXT_BRANCH} ${
+      colors.bold.yellow(constants.TEXT_ACTION_CREATING)
+    }`,
+  );
+
+  await runCommand(constants.GIT_COMMAND, [
+    constants.GIT_COMMAND_ARGUMENT_SWITCH,
+    constants.GIT_COMMAND_ARGUMENT_C,
+    tagName,
+  ]);
+
+  console.info(
+    `${constants.TEXT_BRANCH} ${
+      colors.bold.green(constants.TEXT_ACTION_CREATED)
+    }`,
+  );
+}
+
 async function createBumpCommit(targetVersion: string) {
   console.info(
     `${constants.TEXT_COMMIT} ${
@@ -246,6 +266,5 @@ export {
   getLatestTagFromLocal,
   getLatestTagFromRemote,
   getStatus,
-  pushCommit,
-  pushTag,
+  switchToNewBranch,
 };
