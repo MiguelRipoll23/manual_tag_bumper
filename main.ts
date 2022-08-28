@@ -41,7 +41,7 @@ async function main() {
   }
 
   // Update version files
-  await updateVersionFilesIfExists(newTagName, remote);
+  await updateVersionFilesIfExists(newTagName);
 
   // Create tag
   await git.createTag(newTagName);
@@ -205,7 +205,7 @@ async function confirmTag(newTagName: string) {
   return promptResponse;
 }
 
-async function updateVersionFilesIfExists(newTagName: string, remote: boolean) {
+async function updateVersionFilesIfExists(newTagName: string) {
   // Check if changes pending
   const { staged, updated } = await git.getStatus();
 
