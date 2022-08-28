@@ -12,15 +12,19 @@ deno install --unstable --allow-run --allow-read -n bump https://deno.land/x/man
 
 ## Features
 
-- Create your tags easily and fast with the help of an extra option appearing at the top to easily bump to a new prerelease or migrate from prerelease to stable
+- Create your tags easily and fast with the help of an extra option appearing at
+  the top to easily bump to a new prerelease or migrate from prerelease to
+  stable
 
-- Use custom prerelease identifiers provided by you or regular ones like alpha and beta
+- Use custom prerelease identifiers provided by you or regular ones like alpha
+  and beta
 
-- Update and commit version files (package.json, pom.xml) automatically
+- Create a branch, update and commit version files (package.json, pom.xml)
+  automatically
 
 ## Demo
 
-[![asciicast](https://asciinema.org/a/DfbNJ6C806Vo6VEo8ZJ8JJTZP.svg)](https://asciinema.org/a/DfbNJ6C806Vo6VEo8ZJ8JJTZP)
+[![asciicast](https://asciinema.org/a/ySPtT2lfEa08yrMP59nH9dYpl.svg)](https://asciinema.org/a/ySPtT2lfEa08yrMP59nH9dYpl)
 
 ## Usage
 
