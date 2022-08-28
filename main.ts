@@ -229,7 +229,7 @@ async function updateVersionFilesIfExists(newTagName: string, remote: boolean) {
     await git.createBumpCommit(newTagName);
 
     if (remote) {
-      await git.pushCommit();
+      await git.pushCommit(newTagName);
     }
   }
 }

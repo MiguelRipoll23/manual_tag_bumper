@@ -157,7 +157,7 @@ async function createBumpCommit(targetVersion: string) {
   );
 }
 
-async function pushCommit() {
+async function pushCommit(tagName: string) {
   console.info(
     `${constants.TEXT_COMMIT} ${
       colors.bold.yellow(constants.TEXT_ACTION_PUSHING)
@@ -168,6 +168,7 @@ async function pushCommit() {
     constants.GIT_COMMAND_ARGUMENT_PUSH,
     constants.GIT_COMMAND_ARGUMENT_U,
     constants.GIT_COMMAND_ARGUMENT_ORIGIN,
+    tagName,
   ]);
 
   if (code === 0) {
