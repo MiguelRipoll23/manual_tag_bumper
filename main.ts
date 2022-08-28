@@ -41,10 +41,15 @@ async function main() {
   }
 
   // Update version files
-  await updateVersionFilesIfExists(newTagName);
+  await updateVersionFilesIfExists(newTagName, remote);
 
   // Create tag
   await git.createTag(newTagName);
+
+  // Push tag
+  if (remote) {
+    await git.pushTag();
+  }
 }
 
 function exitIfChangesUnstaged(staged: boolean) {
@@ -205,7 +210,7 @@ async function confirmTag(newTagName: string) {
   return promptResponse;
 }
 
-async function updateVersionFilesIfExists(newTagName: string) {
+async function updateVersionFilesIfExists(newTagName: string, remote: boolean) {
   // Check if changes pending
   const { staged, updated } = await git.getStatus();
 
@@ -222,5 +227,9 @@ async function updateVersionFilesIfExists(newTagName: string) {
 
     console.info(constants.TEXT_EMPTY);
     await git.createBumpCommit(newTagName);
+
+    if (remote) {
+      await git.pushCommit(newTagName);
+    }
   }
 }

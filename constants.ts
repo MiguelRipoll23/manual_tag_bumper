@@ -24,6 +24,7 @@ export const GIT_COMMAND_ARGUMENT_MESSAGE = "-m";
 export const GIT_COMMAND_ARGUMENT_TAG = "tag";
 
 export const GIT_COMMAND_ARGUMENT_PUSH = "push";
+export const GIT_COMMAND_ARGUMENT_U = "-u";
 
 export const GIT_TAGS_PREFIX = "refs/tags/";
 export const GIT_TAGS_SUFFIX = "^{}";
