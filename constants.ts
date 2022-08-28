@@ -5,21 +5,25 @@ export const GIT_COMMAND = "git";
 export const GIT_COMMAND_ARGUMENT_STATUS = "status";
 
 export const GIT_COMMAND_ARGUMENT_UNO = "-uno";
+
+export const GIT_COMMAND_ARGUMENT_LS_REMOTE = "ls-remote";
+export const GIT_COMMAND_ARGUMENT_SORT_DESC_V_REFNAME = "--sort=-v:refname";
+export const GIT_COMMAND_ARGUMENT_ORIGIN = "origin";
+
 export const GIT_COMMAND_ARGUMENT_DESCRIBE = "describe";
 export const GIT_COMMAND_ARGUMENT_TAGS = "--tags";
 export const GIT_COMMAND_ARGUMENT_ABBREV_0 = "--abbrev=0";
 export const GIT_COMMAND_ARGUMENT_ADD = "add";
 export const GIT_COMMAND_ARGUMENT_ADD_FILENAMES = ".";
 
+export const GIT_COMMAND_ARGUMENT_SWITCH = "switch";
+export const GIT_COMMAND_ARGUMENT_C = "-c";
+
 export const GIT_COMMAND_ARGUMENT_COMMIT = "commit";
 export const GIT_COMMAND_ARGUMENT_MESSAGE = "-m";
 export const GIT_COMMAND_ARGUMENT_TAG = "tag";
 
 export const GIT_COMMAND_ARGUMENT_PUSH = "push";
-
-export const GIT_COMMAND_ARGUMENT_LS_REMOTE = "ls-remote";
-export const GIT_COMMAND_ARGUMENT_SORT_DESC_V_REFNAME = "--sort=-v:refname";
-export const GIT_COMMAND_ARGUMENT_ORIGIN = "origin";
 
 export const GIT_TAGS_PREFIX = "refs/tags/";
 export const GIT_TAGS_SUFFIX = "^{}";
@@ -80,6 +84,7 @@ export const TEXT_MAJOR = "major";
 export const TEXT_MINOR = "minor";
 export const TEXT_PATCH = "patch";
 export const TEXT_CONFIRM_VERSION = "Confirm version";
+export const TEXT_BRANCH = "Branch";
 export const TEXT_COMMIT = "Commit";
 export const TEXT_TAG = "Tag";
 

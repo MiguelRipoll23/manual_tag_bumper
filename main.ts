@@ -218,6 +218,9 @@ async function updateVersionFilesIfExists(newTagName: string, remote: boolean) {
 
   if (filesChanged > 0) {
     console.info(constants.TEXT_EMPTY);
+    await git.switchToNewBranch(newTagName);
+
+    console.info(constants.TEXT_EMPTY);
     await git.createBumpCommit(newTagName);
   }
 }
