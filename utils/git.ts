@@ -166,6 +166,7 @@ async function pushCommit() {
 
   const { code } = await runCommand(constants.GIT_COMMAND, [
     constants.GIT_COMMAND_ARGUMENT_PUSH,
+    constants.GIT_COMMAND_ARGUMENT_U,
     constants.GIT_COMMAND_ARGUMENT_ORIGIN,
   ]);
 
@@ -266,5 +267,7 @@ export {
   getLatestTagFromLocal,
   getLatestTagFromRemote,
   getStatus,
+  pushCommit,
+  pushTag,
   switchToNewBranch,
 };
