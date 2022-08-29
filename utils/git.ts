@@ -2,14 +2,13 @@ import * as constants from "../constants.ts";
 import { colors } from "../deps.ts";
 import { runCommand } from "./shell.ts";
 
-async function getStatus(log = false) {
+async function getStatus() {
   const { code, output, errorOutput } = await runCommand(
     constants.GIT_COMMAND,
     [
       constants.GIT_COMMAND_ARGUMENT_STATUS,
-      constants.GIT_COMMAND_ARGUMENT_UNO,
+      constants.GIT_COMMAND_ARGUMENT_UNTRACKED_FILES_NO,
     ],
-    log,
   );
 
   if (code !== 0) {
@@ -53,17 +52,16 @@ async function getLatestTagFromRemote() {
       constants.GIT_COMMAND_ARGUMENT_SORT_DESC_V_REFNAME,
       constants.GIT_COMMAND_ARGUMENT_ORIGIN,
     ],
-    true,
   );
 
   if (code !== 0) {
     throw new Error(errorOutput);
   }
 
-  const lines = output.split("\n");
+  const outputLines = output.split("\n");
 
-  for (const line of lines) {
-    const [sha, ref] = line.split("\t");
+  for (const outputLine of outputLines) {
+    const [sha, ref] = outputLine.split("\t");
 
     if (sha === undefined || ref === undefined) {
       continue;
@@ -74,6 +72,7 @@ async function getLatestTagFromRemote() {
     }
 
     let tag = ref.replace(constants.GIT_TAGS_PREFIX, constants.TEXT_EMPTY);
+
     tag = tag.replace(
       constants.GIT_TAGS_SUFFIX,
       constants.TEXT_EMPTY,
@@ -93,7 +92,6 @@ async function getLatestTagFromLocal() {
       constants.GIT_COMMAND_ARGUMENT_TAGS,
       constants.GIT_COMMAND_ARGUMENT_ABBREV_0,
     ],
-    true,
   );
 
   if (code === 0) {
@@ -108,93 +106,71 @@ async function getLatestTagFromLocal() {
     return constants.GIT_INITIAL_TAG_NAME;
   }
 
-  console.error(errorOutput);
+  console.error(`${constants.EMOJI_ERROR} ${colors.bold.red(errorOutput)}`);
   Deno.exit(1);
 }
 
 async function switchToNewBranch(tagName: string) {
-  console.info(
-    `${constants.TEXT_BRANCH} ${
-      colors.bold.yellow(constants.TEXT_ACTION_CREATING)
-    }`,
-  );
-
-  await runCommand(constants.GIT_COMMAND, [
+  const { code, errorOutput } = await runCommand(constants.GIT_COMMAND, [
     constants.GIT_COMMAND_ARGUMENT_SWITCH,
-    constants.GIT_COMMAND_ARGUMENT_C,
-    tagName,
+    constants.GIT_COMMAND_ARGUMENT_CREATE,
+    constants.VERSION_PREFIX + tagName,
   ]);
 
-  console.info(
-    `${constants.TEXT_BRANCH} ${
-      colors.bold.green(constants.TEXT_ACTION_CREATED)
-    }`,
-  );
+  if (code === 0) {
+    return;
+  }
+
+  console.error(`${constants.EMOJI_ERROR} ${colors.bold.red(errorOutput)}`);
+  Deno.exit(constants.EXIT_ERROR);
 }
 
-async function createBumpCommit(targetVersion: string) {
-  console.info(
-    `${constants.TEXT_COMMIT} ${
-      colors.bold.yellow(constants.TEXT_ACTION_CREATING)
-    }`,
-  );
-
-  await runCommand(constants.GIT_COMMAND, [
+async function prepareCommit() {
+  const { code, errorOutput } = await runCommand(constants.GIT_COMMAND, [
     constants.GIT_COMMAND_ARGUMENT_ADD,
     constants.GIT_COMMAND_ARGUMENT_ADD_FILENAMES,
   ]);
 
-  await runCommand(constants.GIT_COMMAND, [
-    constants.GIT_COMMAND_ARGUMENT_COMMIT,
-    constants.GIT_COMMAND_ARGUMENT_MESSAGE,
-    `${targetVersion}`,
-  ]);
-
-  console.info(
-    `${constants.TEXT_COMMIT} ${
-      colors.bold.green(constants.TEXT_ACTION_CREATED)
-    }`,
-  );
-}
-
-async function pushCommit(tagName: string) {
-  console.info(
-    `${constants.TEXT_COMMIT} ${
-      colors.bold.yellow(constants.TEXT_ACTION_PUSHING)
-    }`,
-  );
-
-  const { code } = await runCommand(constants.GIT_COMMAND, [
-    constants.GIT_COMMAND_ARGUMENT_PUSH,
-    constants.GIT_COMMAND_ARGUMENT_U,
-    constants.GIT_COMMAND_ARGUMENT_ORIGIN,
-    tagName,
-  ]);
-
   if (code === 0) {
-    console.info(
-      `${constants.TEXT_COMMIT} ${
-        colors.bold.green(constants.TEXT_ACTION_PUSHED)
-      }`,
-    );
-
     return;
   }
 
-  console.info(
-    `${constants.TEXT_COMMIT} ${colors.bold.red(constants.TEXT_ACTION_ERROR)}`,
-  );
+  console.error(`${constants.EMOJI_ERROR} ${colors.bold.red(errorOutput)}`);
+  Deno.exit(constants.EXIT_ERROR);
+}
+
+async function createCommit(targetVersion: string) {
+  const { code, errorOutput } = await runCommand(constants.GIT_COMMAND, [
+    constants.GIT_COMMAND_ARGUMENT_COMMIT,
+    constants.GIT_COMMAND_ARGUMENT_MESSAGE,
+    constants.VERSION_PREFIX + targetVersion,
+  ]);
+
+  if (code === 0) {
+    return;
+  }
+
+  console.error(`${constants.EMOJI_ERROR} ${colors.bold.red(errorOutput)}`);
+  Deno.exit(constants.EXIT_ERROR);
+}
+
+async function pushCommit(tagName: string) {
+  const { code, errorOutput } = await runCommand(constants.GIT_COMMAND, [
+    constants.GIT_COMMAND_ARGUMENT_PUSH,
+    constants.GIT_COMMAND_ARGUMENT_SET_UPSTREAM,
+    constants.GIT_COMMAND_ARGUMENT_ORIGIN,
+    constants.VERSION_PREFIX + tagName,
+  ]);
+
+  if (code === 0) {
+    return;
+  }
+
+  console.error(`${constants.EMOJI_ERROR} ${colors.bold.red(errorOutput)}`);
+  Deno.exit(constants.EXIT_ERROR);
 }
 
 async function createTag(tagName: string) {
-  console.info(constants.TEXT_EMPTY);
-
-  console.info(
-    `${constants.TEXT_TAG} ${
-      colors.bold.yellow(constants.TEXT_ACTION_CREATING)
-    }`,
-  );
-
   const { code, errorOutput } = await runCommand(
     constants.GIT_COMMAND,
     [
@@ -204,70 +180,34 @@ async function createTag(tagName: string) {
   );
 
   if (code === 0) {
-    console.info(
-      `${constants.TEXT_TAG} ${
-        colors.bold.green(constants.TEXT_ACTION_CREATED)
-      }`,
-    );
-
-    return true;
+    return;
   }
 
-  if (
-    errorOutput.includes(
-      constants.GIT_ERROR_FAILED_TO_RESOLVE_HEAD_AS_VALID_REF,
-    )
-  ) {
-    console.error(
-      `${constants.TEXT_TAG} ${colors.bold.red(constants.TEXT_ACTION_ERROR)} ${
-        colors.bold.blue(constants.TEXT_ERROR_NO_COMMITS)
-      }`,
-    );
-  } else if (errorOutput.includes(constants.GIT_ERROR_ALREADY_EXISTS)) {
-    console.error(
-      `${constants.TEXT_TAG} ${colors.bold.red(constants.TEXT_ACTION_ERROR)} ${
-        colors.bold.blue(constants.TEXT_ERROR_TAG_ALREADY_EXISTS)
-      }`,
-    );
-  }
-
-  return false;
+  console.error(`${constants.EMOJI_ERROR} ${colors.bold.red(errorOutput)}`);
+  Deno.exit(constants.EXIT_ERROR);
 }
 
 async function pushTag() {
-  console.info(
-    `${constants.TEXT_TAG} ${
-      colors.bold.yellow(constants.TEXT_ACTION_PUSHING)
-    }`,
-  );
-
-  const { code } = await runCommand(constants.GIT_COMMAND, [
+  const { code, errorOutput } = await runCommand(constants.GIT_COMMAND, [
     constants.GIT_COMMAND_ARGUMENT_PUSH,
     constants.GIT_COMMAND_ARGUMENT_TAGS,
     constants.GIT_COMMAND_ARGUMENT_ORIGIN,
   ]);
 
   if (code === 0) {
-    console.info(
-      `${constants.TEXT_TAG} ${
-        colors.bold.green(constants.TEXT_ACTION_PUSHED)
-      }`,
-    );
-
     return;
   }
 
-  console.info(
-    `${constants.TEXT_TAG} ${colors.bold.red(constants.TEXT_ACTION_ERROR)}`,
-  );
+  console.error(`${constants.EMOJI_ERROR} ${colors.bold.red(errorOutput)}`);
 }
 
 export {
-  createBumpCommit,
+  createCommit,
   createTag,
   getLatestTagFromLocal,
   getLatestTagFromRemote,
   getStatus,
+  prepareCommit,
   pushCommit,
   pushTag,
   switchToNewBranch,
