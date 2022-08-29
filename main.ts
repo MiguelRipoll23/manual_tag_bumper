@@ -18,18 +18,18 @@ async function main() {
 
   // Get tag
   const { tagName, remoteError } = await getLatestTagAndSource(remote);
-  const currentVersionKind = version.getKind(tagName);
+  const kind = version.getKind(tagName);
 
-  printTagName(tagName, currentVersionKind, remoteError);
+  printTagName(tagName, kind, remoteError);
 
   // Ask kind
-  const targetVersionKind = await askVersionKind(currentVersionKind);
+  const newKind = await askVersionKind(kind);
 
   // Ask bump
   const newTagName = await askVersionBump(
     tagName,
-    currentVersionKind,
-    targetVersionKind,
+    kind,
+    newKind,
   );
 
   // Confirm new tag
@@ -109,7 +109,7 @@ async function getLatestTagAndSource(remote: boolean) {
 
 function printTagName(
   tagName: string,
-  currentVersionKind: string,
+  kind: string,
   remoteError: boolean,
 ) {
   let local = "";
@@ -122,15 +122,15 @@ function printTagName(
 
   console.info(
     colors.bold(constants.TEXT_LATEST_TAG),
-    colors.bold.blue(version.formatWithEmoji(tagName, currentVersionKind)),
+    colors.bold.blue(version.formatWithEmoji(tagName, kind)),
     local,
   );
 
   console.info(constants.TEXT_EMPTY);
 }
 
-async function askVersionKind(currentVersionKind: string) {
-  let kind = await Select.prompt({
+async function askVersionKind(kind: string) {
+  let userKind = await Select.prompt({
     message: constants.TEXT_PICK_VERSION_KIND,
     options: [
       {
@@ -152,24 +152,24 @@ async function askVersionKind(currentVersionKind: string) {
     ],
   });
 
-  if (kind === constants.TEXT_CUSTOM) {
-    kind = await Input.prompt({
+  if (userKind === constants.TEXT_CUSTOM) {
+    userKind = await Input.prompt({
       message: constants.TEXT_PICK_VERSION_KIND,
-      suggestions: [currentVersionKind],
+      suggestions: [kind],
     });
   }
 
-  return kind;
+  return userKind;
 }
 
 async function askVersionBump(
   tagName: string,
-  currentVersionKind: string,
-  targetVersionKind: string,
+  kind: string,
+  newKind: string,
 ) {
-  const majorVersion = version.getMajor(tagName, targetVersionKind);
-  const minorVersion = version.getMinor(tagName, targetVersionKind);
-  const patchVersion = version.getPatch(tagName, targetVersionKind);
+  const majorVersion = version.getMajor(tagName, newKind);
+  const minorVersion = version.getMinor(tagName, newKind);
+  const patchVersion = version.getPatch(tagName, newKind);
 
   const bumpOptions: SelectValueOptions = [
     {
@@ -195,8 +195,8 @@ async function askVersionBump(
   addExtraOptionsIfNecessary(
     bumpOptions,
     tagName,
-    currentVersionKind,
-    targetVersionKind,
+    kind,
+    newKind,
   );
 
   return await Select.prompt({
