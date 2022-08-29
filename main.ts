@@ -11,7 +11,7 @@ main();
 
 async function main() {
   // Get status
-  const { staged, remote, updated } = await git.getStatus(true);
+  const { staged, remote, updated } = await git.getStatus();
 
   exitIfChangesUnstaged(staged);
   exitIfBranchOutdated(updated);
@@ -20,7 +20,7 @@ async function main() {
   const { tagName, remoteError } = await getLatestTagAndSource(remote);
   const currentVersionKind = version.getKind(tagName);
 
-  printTag(tagName, currentVersionKind, remoteError);
+  printTagName(tagName, currentVersionKind, remoteError);
 
   // Ask kind
   const targetVersionKind = await askVersionKind(currentVersionKind);
@@ -33,21 +33,27 @@ async function main() {
   );
 
   // Confirm new tag
-  const confirmed: boolean = await confirmTag(newTagName);
+  const tagNameConfirmed: boolean = await confirmTagName(newTagName);
 
-  if (confirmed === false) {
+  if (tagNameConfirmed === false) {
     main();
     return;
   }
 
   // Update version files
-  await updateVersionFilesIfExists(newTagName, remote);
+  await updateVersionFilesIfExists(newTagName, remoteError);
 
   // Create tag
   await git.createTag(newTagName);
 
+  if (remoteError) {
+    return;
+  }
+
   // Push tag
-  if (remote) {
+  const tagPushConfirmed = await confirmTagPush(newTagName);
+
+  if (tagPushConfirmed) {
     await git.pushTag();
   }
 }
@@ -61,7 +67,7 @@ function exitIfChangesUnstaged(staged: boolean) {
     colors.bold.red(constants.TEXT_ERROR_CHANGES_UNSTAGED),
   );
 
-  Deno.exit(-1);
+  Deno.exit(constants.EXIT_ERROR);
 }
 
 function exitIfBranchOutdated(updated: boolean) {
@@ -73,7 +79,7 @@ function exitIfBranchOutdated(updated: boolean) {
     colors.bold.red(constants.TEXT_ERROR_BRANCH_OUTDATED),
   );
 
-  Deno.exit(-1);
+  Deno.exit(constants.EXIT_ERROR);
 }
 
 async function getLatestTagAndSource(remote: boolean) {
@@ -101,7 +107,7 @@ async function getLatestTagAndSource(remote: boolean) {
   return result;
 }
 
-function printTag(
+function printTagName(
   tagName: string,
   currentVersionKind: string,
   remoteError: boolean,
@@ -116,9 +122,6 @@ function printTag(
 
   console.info(
     colors.bold(constants.TEXT_LATEST_TAG),
-  );
-
-  console.info(
     colors.bold.blue(version.formatWithEmoji(tagName, currentVersionKind)),
     local,
   );
@@ -202,15 +205,20 @@ async function askVersionBump(
   });
 }
 
-async function confirmTag(newTagName: string) {
+async function confirmTagName(newTagName: string) {
   const promptResponse = await Confirm.prompt(
-    `${constants.TEXT_CONFIRM_VERSION} ${colors.yellow(newTagName)}`,
+    `${constants.TEXT_CONFIRM_TAG_NAME} ${colors.yellow(newTagName)}`,
   );
+
+  console.info(constants.TEXT_EMPTY);
 
   return promptResponse;
 }
 
-async function updateVersionFilesIfExists(newTagName: string, remote: boolean) {
+async function updateVersionFilesIfExists(
+  newTagName: string,
+  remoteError: boolean,
+) {
   // Check if changes pending
   const { staged, updated } = await git.getStatus();
 
@@ -222,14 +230,25 @@ async function updateVersionFilesIfExists(newTagName: string, remote: boolean) {
   const filesChanged = await files.updateVersionFiles(newTagName);
 
   if (filesChanged > 0) {
-    console.info(constants.TEXT_EMPTY);
     await git.switchToNewBranch(newTagName);
 
-    console.info(constants.TEXT_EMPTY);
-    await git.createBumpCommit(newTagName);
+    await git.prepareCommit();
+    await git.createCommit(newTagName);
 
-    if (remote) {
+    if (remoteError === false) {
       await git.pushCommit(newTagName);
     }
   }
+}
+
+async function confirmTagPush(newTagName: string) {
+  console.info(constants.TEXT_EMPTY);
+
+  const promptResponse = await Confirm.prompt(
+    `${constants.TEXT_CONFIRM_TAG_PUSH} ${colors.yellow(newTagName)}`,
+  );
+
+  console.info(constants.TEXT_EMPTY);
+
+  return promptResponse;
 }

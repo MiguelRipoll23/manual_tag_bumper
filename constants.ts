@@ -1,10 +1,13 @@
+// Exit codes
+export const EXIT_ERROR = -1;
+
 // Git
 export const GIT_INITIAL_TAG_NAME = "0.0.1-alpha.0";
 
 export const GIT_COMMAND = "git";
 export const GIT_COMMAND_ARGUMENT_STATUS = "status";
 
-export const GIT_COMMAND_ARGUMENT_UNO = "-uno";
+export const GIT_COMMAND_ARGUMENT_UNTRACKED_FILES_NO = "--untracked-files=no";
 
 export const GIT_COMMAND_ARGUMENT_LS_REMOTE = "ls-remote";
 export const GIT_COMMAND_ARGUMENT_SORT_DESC_V_REFNAME = "--sort=-v:refname";
@@ -17,14 +20,14 @@ export const GIT_COMMAND_ARGUMENT_ADD = "add";
 export const GIT_COMMAND_ARGUMENT_ADD_FILENAMES = ".";
 
 export const GIT_COMMAND_ARGUMENT_SWITCH = "switch";
-export const GIT_COMMAND_ARGUMENT_C = "-c";
+export const GIT_COMMAND_ARGUMENT_CREATE = "--create";
 
 export const GIT_COMMAND_ARGUMENT_COMMIT = "commit";
-export const GIT_COMMAND_ARGUMENT_MESSAGE = "-m";
+export const GIT_COMMAND_ARGUMENT_MESSAGE = "--message";
 export const GIT_COMMAND_ARGUMENT_TAG = "tag";
 
 export const GIT_COMMAND_ARGUMENT_PUSH = "push";
-export const GIT_COMMAND_ARGUMENT_U = "-u";
+export const GIT_COMMAND_ARGUMENT_SET_UPSTREAM = "--set-upstream";
 
 export const GIT_TAGS_PREFIX = "refs/tags/";
 export const GIT_TAGS_SUFFIX = "^{}";
@@ -34,9 +37,6 @@ export const GIT_ORIGIN = "origin";
 export const GIT_BRANCH_UP_TO_DATE = "branch is up to date";
 export const GIT_ERROR_NO_NAMES_FOUND_CANNOT_DESCRIBE_ANYTHING =
   "fatal: No names found, cannot describe anything.";
-export const GIT_ERROR_FAILED_TO_RESOLVE_HEAD_AS_VALID_REF =
-  "fatal: Failed to resolve 'HEAD' as a valid ref.";
-export const GIT_ERROR_ALREADY_EXISTS = "already exists";
 
 export const VERSION_PREFIX = "v";
 
@@ -55,6 +55,7 @@ export const WINDOWS_COMMAND_CMD_SUFFIX = ".cmd";
 export const WINDOWS_COMMAND_BAT_SUFFIX = ".bat";
 
 // Emoji
+export const EMOJI_ERROR = "❗";
 export const EMOJI_SHELL = "🐚";
 export const EMOJI_UNKNOWN = "🔨";
 export const EMOJI_STABLE = "🚀";
@@ -84,22 +85,11 @@ export const TEXT_NONE = "none";
 export const TEXT_MAJOR = "major";
 export const TEXT_MINOR = "minor";
 export const TEXT_PATCH = "patch";
-export const TEXT_CONFIRM_VERSION = "Confirm version";
-export const TEXT_BRANCH = "Branch";
-export const TEXT_COMMIT = "Commit";
-export const TEXT_TAG = "Tag";
+export const TEXT_CONFIRM_TAG_NAME = "Confirm tag name";
+
+export const TEXT_CONFIRM_TAG_PUSH = "Confirm tag push";
 
 export const TEXT_ERROR_NO_TAGS_FOUND = "No tags found";
-export const TEXT_ERROR_NO_COMMITS = "[no commit]";
-export const TEXT_ERROR_TAG_ALREADY_EXISTS = "[already exists]";
-
-export const TEXT_ACTION_ERROR = "(error)";
-export const TEXT_ACTION_CREATING = "(creating)";
-export const TEXT_ACTION_CREATED = "(created)";
-export const TEXT_ACTION_UPDATING = "(updating)";
-export const TEXT_ACTION_UPDATED = "(updated)";
-export const TEXT_ACTION_PUSHING = "(pushing)";
-export const TEXT_ACTION_PUSHED = "(pushed)";
 
 export const TEXT_ERROR_CHANGES_UNSTAGED =
   "Changes unstaged, commit your local changes";
