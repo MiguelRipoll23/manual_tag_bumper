@@ -1,5 +1,3 @@
-# User contribution
-
 ## Description
 
 Description of your pull request.
