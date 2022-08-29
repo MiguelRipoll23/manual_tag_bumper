@@ -1,5 +1,6 @@
 import * as constants from "../constants.ts";
-import { colors } from "../deps.ts";
+
+import { colors } from "../../deps.ts";
 import { runCommand } from "./shell.ts";
 
 async function getStatus() {

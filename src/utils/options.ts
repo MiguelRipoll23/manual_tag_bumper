@@ -1,4 +1,4 @@
-import { colors, SelectValueOptions } from "../deps.ts";
+import { colors, SelectValueOptions } from "../../deps.ts";
 
 import * as version from "./version.ts";
 import * as constants from "../constants.ts";
