@@ -1,4 +1,4 @@
-import { semver } from "../deps.ts";
+import { semver } from "../../deps.ts";
 
 import * as constants from "../constants.ts";
 

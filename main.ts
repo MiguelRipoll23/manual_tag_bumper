@@ -1,10 +1,10 @@
 import { colors, Confirm, Input, Select, SelectValueOptions } from "./deps.ts";
-import { addExtraOptionsIfNecessary } from "./utils/options.ts";
+import { addExtraOptionsIfNecessary } from "./src/utils/options.ts";
 
-import * as constants from "./constants.ts";
-import * as git from "./utils/git.ts";
-import * as version from "./utils/version.ts";
-import * as files from "./utils/files.ts";
+import * as constants from "./src/constants.ts";
+import * as git from "./src/utils/git.ts";
+import * as version from "./src/utils/version.ts";
+import * as files from "./src/utils/files.ts";
 
 // Entry point
 main();
