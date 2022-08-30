@@ -1,5 +1,8 @@
 # manual_tag_bumper
 
+> **Warning**
+> Repository and module [has moved here](https://github.com/MiguelRipoll23/tag_bumper)
+
 Easily bump tags in your Git repository using the bump command.
 
 **Compatibility:** npm, maven
